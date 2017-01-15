@@ -18,3 +18,7 @@ gulp.task('sass', function() {
     .pipe(rename({extname: '.css.liquid'}))
     .pipe(gulp.dest('.build/assets'));
 });
+
+gulp.task('build', ['scripts', 'sass']);
+
+gulp.task('default', ['build']);
