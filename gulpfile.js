@@ -5,6 +5,7 @@ var concat = require('gulp-concat');
 var rename = require('gulp-rename');
 var sass = require('gulp-sass');
 var merge = require('merge-stream');
+var del = require('del');
 
 gulp.task('scripts', function() {
   return gulp.src('theme/assets/js/script-*.js')
@@ -31,6 +32,10 @@ gulp.task('build', ['scripts', 'sass'], function() {
     .pipe(gulp.dest('.build'));
 
   return merge(fonts, images, theme);
+});
+
+gulp.task('clean', function() {
+  del(['.build/**/*', '!.build/**/*.yml*']);
 });
 
 gulp.task('default', ['build']);
