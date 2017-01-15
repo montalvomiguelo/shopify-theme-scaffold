@@ -38,4 +38,6 @@ gulp.task('clean', function() {
   del(['.build/**/*', '!.build/**/*.yml*']);
 });
 
-gulp.task('default', ['build']);
+gulp.task('default', ['clean'], function() {
+  gulp.start('build');
+});
