@@ -7,6 +7,7 @@ var sass = require('gulp-sass');
 var merge = require('merge-stream');
 var del = require('del');
 var newer = require('gulp-newer');
+var runSequence = require('run-sequence');
 
 gulp.task('scripts', function() {
   return gulp.src('theme/assets/js/script-*.js')
@@ -47,8 +48,7 @@ gulp.task('copy', function() {
 gulp.task('build', ['scripts', 'sass', 'copy']);
 
 gulp.task('clean', function() {
-  console.log('deleting');
-  del(['.build/**/*', '!.build/**/*.yml*']);
+  return del(['.build/**/*', '!.build/**/*.yml*']);
 });
 
 gulp.task('watch', function() {
@@ -62,4 +62,6 @@ gulp.task('watch', function() {
   ], ['copy']);
 });
 
-gulp.task('default', ['clean', 'build']);
+gulp.task('default', function() {
+  runSequence('clean', ['build']);
+});
