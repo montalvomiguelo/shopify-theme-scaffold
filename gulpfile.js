@@ -38,6 +38,11 @@ gulp.task('clean', function() {
   del(['.build/**/*', '!.build/**/*.yml*']);
 });
 
+gulp.task('watch', function() {
+  gulp.watch('theme/assets/scss/**/*.scss', ['sass']);
+  gulp.watch('theme/assets/js/**/*.js', ['scripts']);
+});
+
 gulp.task('default', ['clean'], function() {
   gulp.start('build');
 });
