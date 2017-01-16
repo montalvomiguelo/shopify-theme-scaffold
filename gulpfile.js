@@ -43,6 +43,4 @@ gulp.task('watch', function() {
   gulp.watch('theme/assets/js/**/*.js', ['scripts']);
 });
 
-gulp.task('default', ['clean'], function() {
-  gulp.start('build');
-});
+gulp.task('default', ['clean', 'build']);
