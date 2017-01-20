@@ -8,6 +8,9 @@ var merge = require('merge-stream');
 var del = require('del');
 var newer = require('gulp-newer');
 var runSequence = require('run-sequence');
+var cleanCSS = require('gulp-clean-css');
+var uglify = require('gulp-uglify');
+var imagemin = require('gulp-imagemin');
 
 gulp.task('scripts', function() {
   return gulp.src('theme/assets/js/script-*.js')
@@ -45,8 +48,6 @@ gulp.task('copy', function() {
   return merge(fonts, images, theme);
 });
 
-gulp.task('build', ['scripts', 'sass', 'copy']);
-
 gulp.task('clean', function() {
   return del(['.build/**/*', '!.build/**/*.yml*']);
 });
@@ -62,6 +63,26 @@ gulp.task('watch', function() {
   ], ['copy']);
 });
 
+gulp.task('minify', function() {
+  var styles = gulp.src('.build/assets/*.css.liquid')
+    .pipe(cleanCSS())
+    .pipe(gulp.dest('.build/assets'));
+
+  var scripts = gulp.src('.build/assets/*.js.liquid')
+    .pipe(uglify())
+    .pipe(gulp.dest('.build/assets'));
+
+  var images = gulp.src('.build/assets/*.+(png|jpg|gif|svg)')
+    .pipe(imagemin())
+    .pipe(gulp.dest('.build/assets'));
+
+  return merge(styles, scripts, images);
+});
+
 gulp.task('default', function() {
-  runSequence('clean', ['build']);
+  runSequence('clean', ['scripts', 'sass', 'copy'], 'watch');
+});
+
+gulp.task('build', function() {
+  runSequence('clean', ['scripts', 'sass', 'copy'], 'minify');
 });
