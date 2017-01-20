@@ -13,7 +13,7 @@ var uglify = require('gulp-uglify');
 var imagemin = require('gulp-imagemin');
 
 gulp.task('scripts', function() {
-  return gulp.src('theme/assets/js/script-*.js')
+  return gulp.src(['theme/assets/js/script-*.js'])
     .pipe(newer('.build/assets/script.js.liquid'))
     .pipe(concat('script.js'))
     .pipe(rename({extname: '.js.liquid'}))
