@@ -73,7 +73,7 @@ gulp.task('minify', function() {
     .pipe(uglify())
     .pipe(gulp.dest('.build/assets'));
 
-  var images = gulp.src('.build/assets/*.+(png|jpg|gif|svg)')
+  var images = gulp.src('.build/assets/*.+(png|jpg|jpeg|gif)')
     .pipe(imagemin())
     .pipe(gulp.dest('.build/assets'));
 
