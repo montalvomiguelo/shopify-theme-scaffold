@@ -1,7 +1,7 @@
 Shopify Theme Scaffold
 ======================
 
-## Fork Shopify Theme Scaffold
+## Fork of Shopify Theme Scaffold
 This is a variaton on the original. Changes include:
 
 * Using Gulp instead of Grunt.
