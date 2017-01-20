@@ -11,6 +11,7 @@ var runSequence = require('run-sequence');
 var cleanCSS = require('gulp-clean-css');
 var uglify = require('gulp-uglify');
 var imagemin = require('gulp-imagemin');
+var zip = require('gulp-zip');
 
 gulp.task('scripts', function() {
   return gulp.src(['theme/assets/js/script-*.js'])
@@ -49,7 +50,7 @@ gulp.task('copy', function() {
 });
 
 gulp.task('clean', function() {
-  return del(['.build/**/*', '!.build/**/*.yml*']);
+  return del(['.build/**/*', 'dist', '!.build/**/*.yml*']);
 });
 
 gulp.task('watch', function() {
@@ -79,10 +80,20 @@ gulp.task('minify', function() {
   return merge(styles, scripts, images);
 });
 
+gulp.task('compress', function() {
+  return gulp.src('.build/**/*')
+    .pipe(zip('your-theme-name.zip'))
+    .pipe(gulp.dest('dist'));
+});
+
 gulp.task('default', function() {
   runSequence('clean', ['scripts', 'sass', 'copy'], 'watch');
 });
 
 gulp.task('build', function() {
   runSequence('clean', ['scripts', 'sass', 'copy'], 'minify');
+});
+
+gulp.task('dist', function() {
+  runSequence('clean', ['scripts', 'sass', 'copy'], 'minify', 'compress');
 });

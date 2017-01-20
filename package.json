@@ -17,6 +17,7 @@
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^3.1.0",
     "gulp-uglify": "^2.0.0",
+    "gulp-zip": "^3.2.0",
     "merge-stream": "^1.0.1",
     "run-sequence": "^1.2.2"
   }
