@@ -12,6 +12,7 @@ var cleanCSS = require('gulp-clean-css');
 var uglify = require('gulp-uglify');
 var imagemin = require('gulp-imagemin');
 var zip = require('gulp-zip');
+var autoprefixer = require('gulp-autoprefixer');
 
 gulp.task('scripts', function() {
   return gulp.src(['theme/assets/js/script-*.js'])
@@ -29,6 +30,9 @@ gulp.task('sass', function() {
       extra: 'theme/assets/scss/**/*.scss'
     }))
     .pipe(sass().on('error', sass.logError))
+    .pipe(autoprefixer({
+      browsers: ['last 2 versions', 'ie >= 9']
+    }))
     .pipe(rename({extname: '.css.liquid'}))
     .pipe(gulp.dest('.build/assets'));
 });
