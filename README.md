@@ -5,6 +5,7 @@ Shopify Theme Scaffold
 This is a variaton on the original. Changes include:
 
 * Using Gulp instead of Grunt.
+* Let Autoprefixer handle vendor prefixes for us.
 
 This repository provides a suggested directory structure and [Gulp][]
 configuration for making the Shopify theme development process as smooth as
@@ -24,7 +25,7 @@ open-source options you have are:
 You also have (shameless plug alert) a non-open-source, paid option in the form of [Bootstrap for Shopify][].
 
 [Disco]: https://www.discolabs.com
-[Gulp]: http://gulp.com
+[Gulp]: http://gulpjs.com
 [Timber]: http://shopify.github.io/Timber/
 [Skeleton Theme]: https://github.com/Shopify/skeleton-theme
 [Bootstrapify]: https://github.com/luciddesign/bootstrapify
