@@ -45,10 +45,6 @@ gulp.task('copy', function() {
   return merge(fonts, images, theme);
 });
 
-gulp.task('clean', function() {
-  return del(['.build/**/*', 'dist', '!.build/**/*.yml*']);
-});
-
 gulp.task('watch', function() {
   gulp.watch('theme/assets/scss/**/*.scss', ['sass']);
   gulp.watch('theme/assets/js/**/*.js', ['scripts']);
@@ -76,18 +72,20 @@ gulp.task('minify', function() {
   return merge(styles, scripts, images);
 });
 
+gulp.task('clean', function() {
+  return del(['.build/**/*', 'dist', '!.build/**/*.yml*']);
+});
+
 gulp.task('compress', function() {
   return gulp.src('.build/**/*')
     .pipe($.zip('your-theme-name.zip'))
     .pipe(gulp.dest('dist'));
 });
 
-gulp.task('default', function() {
-  runSequence('clean', ['scripts', 'sass', 'copy'], 'watch');
-});
+gulp.task('default', ['scripts', 'sass', 'copy', 'watch']);
 
 gulp.task('build', function() {
-  runSequence('clean', ['scripts', 'sass', 'copy'], 'minify');
+  runSequence(['scripts', 'sass', 'copy'], 'minify');
 });
 
 gulp.task('dist', function() {
