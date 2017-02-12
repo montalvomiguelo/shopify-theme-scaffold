@@ -5,7 +5,6 @@ Shopify Theme Scaffold
 This is a variaton on the original. Changes include:
 
 * Using Gulp instead of Grunt.
-* Let Autoprefixer handle vendor prefixes for us.
 
 This repository provides a suggested directory structure and [Gulp][]
 configuration for making the Shopify theme development process as smooth as
@@ -81,8 +80,8 @@ scaffold:
 Any Javascript files you'd like concatenated and (in production) minified
 should go in here.
 
-For each final script file you'd like to use in your theme, set up an
-Scripts `gulp.src` in `gulpfile.js` like this:
+In `scripts` task `gulp.src` points to all scripts you'd like to use in
+your theme:
 
 ```js
 gulp.task('scripts', function() {
@@ -98,8 +97,8 @@ gulp.task('scripts', function() {
 Any stylesheets you'd like to be precompiled and (in production) minified
 should go in here.
 
-For each final stylesheet file you'd like to use in your theme, set up a Sass
-`gulp.src` in `gulpfile.js` like this:
+In `sass` task `gulp.src` points to only one source file `theme/assets/scss/styles.scss`,
+manifest that includes other sass partials.
 
 ```js
 gulp.task('sass', function() {
