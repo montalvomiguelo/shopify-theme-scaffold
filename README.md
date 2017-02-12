@@ -5,6 +5,7 @@ Shopify Theme Scaffold
 This is a variaton on the original. Changes include:
 
 * Using Gulp instead of Grunt.
+* Added .editorconfig file based on syntax of current files
 
 This repository provides a suggested directory structure and [Gulp][]
 configuration for making the Shopify theme development process as smooth as
@@ -43,7 +44,7 @@ from the base directory, which should do the rest.
 
 
 ## Development Builds
-Running `gulp build` will compile all of your files into the `.build`
+Running `gulp` command will compile all of your files into the `.build`
 directory in the directory structure expected by Shopify. You can run
 `gulp dist` to additionally generate a `.zip` file, packaging these files up
 for direct upload through the Shopify Admin interface.
@@ -54,14 +55,13 @@ run `theme watch` in that directory. Subsequent builds of your theme that alter
 files in the `theme` directory will have their changes automatically uploaded
 to Shopify.
 
-Instead of running `gulp build` every time you want to rebuild your theme, you
-can use the `gulp watch` command to start a process watching all of your files
-for changes. The `watch` command has plenty of smarts to avoid recompiling your
+The default `gulp` command also runs a `gulp watch` task that will be watching all of your files
+for changes. The watch task  has plenty of smarts to avoid recompiling your
 entire theme every time a single file changes.
 
 
 ## Production Builds
-The standard `gulp build` command assumes a production environment. It will build a
+The `gulp build` command assumes a production environment. It will build a
 "production" version of your theme, with minified assets and optimised images.
 
 We highly recommend using [DeployBot][] to deploy Shopify themes in production.
