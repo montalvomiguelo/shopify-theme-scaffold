@@ -22,9 +22,6 @@ gulp.task('sass', function() {
       extra: 'theme/assets/scss/**/*.scss'
     }))
     .pipe($.sass().on('error', $.sass.logError))
-    .pipe($.autoprefixer({
-      browsers: ['last 2 versions', 'ie >= 9']
-    }))
     .pipe($.rename({extname: '.css.liquid'}))
     .pipe(gulp.dest('.build/assets'));
 });
