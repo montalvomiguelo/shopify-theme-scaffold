@@ -109,6 +109,7 @@ your theme:
 ```js
 gulp.task('scripts', function() {
   return gulp.src(['theme/assets/js/script-*.js'])
+  // Do stuff
 });
 ```
 
@@ -122,6 +123,7 @@ manifest that includes other sass partials.
 ```js
 gulp.task('sass', function() {
   return gulp.src('theme/assets/scss/styles.scss')
+  // Do stuff
 });
 ```
 
