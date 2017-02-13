@@ -43,14 +43,12 @@ gulp.task('copy', function() {
   return merge(fonts, images, theme);
 });
 
-gulp.task('serve', function() {
+gulp.task('serve', ['scripts', 'sass', 'copy'], function() {
   browserSync.init({
     proxy: 'https://fountrace.myshopify.com',
     injectChanges: false,
   });
-});
 
-gulp.task('watch', ['serve'], function() {
   gulp.watch('theme/assets/scss/**/*.scss', ['sass']);
   gulp.watch('theme/assets/js/**/*.js', ['scripts']);
   gulp.watch([
@@ -59,6 +57,7 @@ gulp.task('watch', ['serve'], function() {
     'theme/assets/static/img/**/*',
     'theme/assets/static/fonts/**/*'
   ], ['copy']);
+
   gulp.watch('/tmp/theme.update').on('change', browserSync.reload);
 });
 
@@ -94,7 +93,7 @@ gulp.task('compress', function() {
     .pipe(gulp.dest('dist'));
 });
 
-gulp.task('default', ['scripts', 'sass', 'copy', 'watch']);
+gulp.task('default', ['serve']);
 
 gulp.task('build', function() {
   runSequence(['scripts', 'copy'], 'minify');

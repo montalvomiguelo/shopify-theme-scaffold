@@ -60,23 +60,23 @@ files in the `theme` directory will have their changes automatically uploaded
 to Shopify.
 
 You can provide an optional `--nofity` argument with a file path that
-you want to have updated when the workers have gone idle. So watch task we can listen to changes on
-this file and reload the page with [Browsersync][]. _(Default gulp
-command runs a watch task that will be watching all of your files
-for changes.)_
+you want to have updated when the workers have gone idle. So watching
+changes on this file we can reload the page with [Browsersync][].
+_(Default gulp command watches all of your files for changes.)_
 
 ```
 theme watch --notify=/tmp/theme.update
 ````
 
-Then in `serve` task set the URL of your shopify store like so:
+In `serve` task set the URL of your shopify store in `proxy` property:
 
 ```js
-gulp.task('serve', function() {
+gulp.task('serve', ['scripts', 'sass', 'copy'], function() {
   browserSync.init({
     proxy: 'https://your-store.myshopify.com',
     injectChanges: false,
   });
+  // Do stuff
 });
 ```
 
@@ -109,10 +109,6 @@ your theme:
 ```js
 gulp.task('scripts', function() {
   return gulp.src(['theme/assets/js/script-*.js'])
-    .pipe(newer('.build/assets/script.js.liquid'))
-    .pipe(concat('script.js'))
-    .pipe(rename({extname: '.js.liquid'}))
-    .pipe(gulp.dest('.build/assets'));
 });
 ```
 
@@ -126,14 +122,6 @@ manifest that includes other sass partials.
 ```js
 gulp.task('sass', function() {
   return gulp.src('theme/assets/scss/styles.scss')
-    .pipe(newer({
-      dest: '.build/assets',
-      ext: '.css.liquid',
-      extra: 'theme/assets/scss/**/*.scss'
-    }))
-    .pipe(sass().on('error', sass.logError))
-    .pipe(rename({extname: '.css.liquid'}))
-    .pipe(gulp.dest('.build/assets'));
 });
 ```
 
