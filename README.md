@@ -4,8 +4,10 @@ Shopify Theme Scaffold
 ## Fork of Shopify Theme Scaffold
 This is a variaton on the original. Changes include:
 
-* Using Gulp instead of Grunt.
+* Using Gulp instead of Grunt
 * Added .editorconfig file based on syntax of current files
+* Added sections directory
+* Use of [Theme Kit][] instead of [Theme gem][]
 
 This repository provides a suggested directory structure and [Gulp][]
 configuration for making the Shopify theme development process as smooth as
@@ -31,6 +33,8 @@ You also have (shameless plug alert) a non-open-source, paid option in the form 
 [Bootstrapify]: https://github.com/luciddesign/bootstrapify
 [Shopify Theme Framework]: https://github.com/Cam/Shopify-Theme-Framework
 [Bootstrap for Shopify]: http://bootstrapforshopify.com/?utm_source=github&utm_medium=github&utm_content=readme&utm_campaign=shopify-theme-scaffold
+[Theme Kit]: https://github.com/Shopify/themekit
+[Theme gem]: https://github.com/Shopify/shopify_theme
 
 
 ## Dependencies and Setup
@@ -49,7 +53,7 @@ directory in the directory structure expected by Shopify. You can run
 `gulp dist` to additionally generate a `.zip` file, packaging these files up
 for direct upload through the Shopify Admin interface.
 
-If you're familiar with the `shopify_theme` gem, just add your theme
+If you're familiar with the [Theme Kit][] command line tool, just add your theme
 configuration details to a `config.yml` file in the `.build` directory, then
 run `theme watch` in that directory. Subsequent builds of your theme that alter
 files in the `theme` directory will have their changes automatically uploaded
