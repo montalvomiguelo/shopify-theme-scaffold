@@ -45,7 +45,7 @@ gulp.task('copy', function() {
 
 gulp.task('serve', ['scripts', 'sass', 'copy'], function() {
   browserSync.init({
-    proxy: 'https://fountrace.myshopify.com',
+    proxy: 'https://your-store.myshopify.com',
     injectChanges: false,
   });
 
