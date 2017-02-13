@@ -10,3 +10,4 @@ config.yml
 /.build/locales
 /.build/snippets
 /.build/templates
+/.build/sections
