@@ -8,6 +8,7 @@ This is a variaton on the original. Changes include:
 * Added .editorconfig file based on syntax of current files
 * Added sections directory
 * Use of [Theme Kit][] instead of [Theme gem][]
+* Browsers automatically updated on theme changes with [Browsersync][]
 
 This repository provides a suggested directory structure and [Gulp][]
 configuration for making the Shopify theme development process as smooth as
@@ -35,6 +36,7 @@ You also have (shameless plug alert) a non-open-source, paid option in the form 
 [Bootstrap for Shopify]: http://bootstrapforshopify.com/?utm_source=github&utm_medium=github&utm_content=readme&utm_campaign=shopify-theme-scaffold
 [Theme Kit]: https://github.com/Shopify/themekit
 [Theme gem]: https://github.com/Shopify/shopify_theme
+[Browsersync]: https://www.browsersync.io/docs/gulp
 
 
 ## Dependencies and Setup
@@ -49,9 +51,7 @@ from the base directory, which should do the rest.
 
 ## Development Builds
 Running `gulp` command will compile all of your files into the `.build`
-directory in the directory structure expected by Shopify. You can run
-`gulp dist` to additionally generate a `.zip` file, packaging these files up
-for direct upload through the Shopify Admin interface.
+directory in the directory structure expected by Shopify.
 
 If you're familiar with the [Theme Kit][] command line tool, just add your theme
 configuration details to a `config.yml` file in the `.build` directory, then
@@ -59,14 +59,33 @@ run `theme watch` in that directory. Subsequent builds of your theme that alter
 files in the `theme` directory will have their changes automatically uploaded
 to Shopify.
 
-The default `gulp` command also runs a `gulp watch` task that will be watching all of your files
-for changes. The watch task  has plenty of smarts to avoid recompiling your
-entire theme every time a single file changes.
+You can provide an optional `--nofity` argument with a file path that
+you want to have updated when the workers have gone idle. So watch task we can listen to changes on
+this file and reload the page with [Browsersync][]. _(Default gulp
+command runs a watch task that will be watching all of your files
+for changes.)_
 
+```
+theme watch --notify=/tmp/theme.update
+````
+
+Then in `serve` task set the URL of your shopify store like so:
+
+```js
+gulp.task('serve', function() {
+  browserSync.init({
+    proxy: 'https://your-store.myshopify.com',
+    injectChanges: false,
+  });
+});
+```
 
 ## Production Builds
 The `gulp build` command assumes a production environment. It will build a
 "production" version of your theme, with minified assets and optimised images.
+
+You can run `gulp dist` to additionally generate a `.zip` file, packaging these
+files up for direct upload through the Shopify Admin interface.
 
 We highly recommend using [DeployBot][] to deploy Shopify themes in production.
 Their new build server functionality is a perfect match for a Gulp-driven
@@ -145,6 +164,10 @@ The `settings_schema.json` file will be copied from `theme/config` to
 #### theme/snippets
 All `.liquid` files in `theme/snippets` are copied directly into
 `.build/templates` on compilation.
+
+#### theme/sections
+All `.liquid` files in `theme/sections` are copied directly into
+`.build/sections` on compilation.
 
 #### theme/templates
 All `.liquid` files in `theme/templates` are copied directly into

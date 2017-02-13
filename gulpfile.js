@@ -5,6 +5,7 @@ var $ = require('gulp-load-plugins')();
 var merge = require('merge-stream');
 var del = require('del');
 var runSequence = require('run-sequence');
+var browserSync = require('browser-sync').create();
 
 gulp.task('scripts', function() {
   return gulp.src(['theme/assets/js/script-*.js'])
@@ -42,7 +43,14 @@ gulp.task('copy', function() {
   return merge(fonts, images, theme);
 });
 
-gulp.task('watch', function() {
+gulp.task('serve', function() {
+  browserSync.init({
+    proxy: 'https://fountrace.myshopify.com',
+    injectChanges: false,
+  });
+});
+
+gulp.task('watch', ['serve'], function() {
   gulp.watch('theme/assets/scss/**/*.scss', ['sass']);
   gulp.watch('theme/assets/js/**/*.js', ['scripts']);
   gulp.watch([
@@ -51,6 +59,7 @@ gulp.task('watch', function() {
     'theme/assets/static/img/**/*',
     'theme/assets/static/fonts/**/*'
   ], ['copy']);
+  gulp.watch('/tmp/theme.update').on('change', browserSync.reload);
 });
 
 gulp.task('minify', function() {
