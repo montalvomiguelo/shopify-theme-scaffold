@@ -72,7 +72,12 @@ gulp.task('minify', function() {
     .pipe(gulp.dest('.build/assets'));
 
   var images = gulp.src('.build/assets/*.+(png|jpg|jpeg|gif|svg)')
-    .pipe($.imagemin([]))
+    .pipe($.imagemin([
+      $.imagemin.gifsicle(),
+      $.imagemin.jpegtran(),
+      $.imagemin.optipng(),
+      $.imagemin.svgo({plugins: [{cleanupIDs: false}, {removeUselessDefs: false}]})
+    ]))
     .pipe(gulp.dest('.build/assets'));
 
   return merge(sass, scripts, images);
