@@ -58,18 +58,6 @@ gulp.task('sass', function() {
     .pipe(gulp.dest('.build/assets'));
 });
 
-gulp.task('copy', function() {
-  var images = gulp.src('theme/assets/static/img/**/*')
-    .pipe($.newer('.build/assets'))
-    .pipe(gulp.dest('.build/assets'));
-
-  var theme = gulp.src(['theme/**/*', '!theme/assets/**/*', '!theme/icons/**/*'])
-    .pipe($.newer('.build'))
-    .pipe(gulp.dest('.build'));
-
-  return merge(images, theme);
-});
-
 gulp.task('icons', function() {
   return gulp.src('theme/icons/**/*.svg')
     .pipe($.newer({
@@ -86,45 +74,42 @@ gulp.task('icons', function() {
     .pipe(gulp.dest('.build/snippets'));
 });
 
-gulp.task('serve', ['scripts', 'sass', 'copy', 'icons'], function() {
+gulp.task('copy', function() {
+  return gulp.src(['theme/**/*', '!theme/assets/js{,/**}', '!theme/assets/scss{,/**}', '!theme/icons{,/**}'])
+    .pipe($.newer('.build'))
+    .pipe(gulp.dest('.build'));
+});
+
+gulp.task('serve', ['scripts', 'sass', 'icons', 'copy'], function() {
   browserSync.init({
     proxy: 'https://your-store.myshopify.com',
     injectChanges: false,
   });
 
-  gulp.watch('theme/assets/scss/**/*.scss', ['sass']);
   gulp.watch('theme/assets/js/**/*.js', ['scripts']);
+  gulp.watch('theme/assets/scss/**/*.scss', ['sass']);
+  gulp.watch('theme/icons/**/*.svg', ['icons']);
   gulp.watch([
     'theme/**/*',
-    '!theme/assets/**/*',
+    '!theme/assets/js/**/*',
+    '!theme/assets/scss/**/*',
     '!theme/icons/**/*',
-    'theme/assets/static/img/**/*',
   ], ['copy']);
-  gulp.watch('theme/icons/**/*.svg', ['icons']);
 
   gulp.watch('/tmp/theme.update').on('change', browserSync.reload);
 });
 
 gulp.task('minify', function() {
+  var scripts = gulp.src('.build/assets/*.js.liquid')
+    .pipe($.uglify())
+    .pipe(gulp.dest('.build/assets'));
+
   var sass = gulp.src('theme/assets/scss/styles.scss')
     .pipe($.sass({outputStyle: 'compressed'}).on('error', $.sass.logError))
     .pipe($.rename({extname: '.css.liquid'}))
     .pipe(gulp.dest('.build/assets'));
 
-  var scripts = gulp.src('.build/assets/*.js.liquid')
-    .pipe($.uglify())
-    .pipe(gulp.dest('.build/assets'));
-
-  var images = gulp.src('.build/assets/*.+(png|jpg|jpeg|gif|svg)')
-    .pipe($.imagemin([
-      $.imagemin.gifsicle(),
-      $.imagemin.jpegtran(),
-      $.imagemin.optipng(),
-      $.imagemin.svgo({plugins: [{cleanupIDs: false}, {removeUselessDefs: false}]})
-    ]))
-    .pipe(gulp.dest('.build/assets'));
-
-  return merge(sass, scripts, images);
+  return merge(scripts, sass);
 });
 
 gulp.task('clean', function() {
@@ -140,9 +125,9 @@ gulp.task('compress', function() {
 gulp.task('default', ['serve']);
 
 gulp.task('build', function() {
-  runSequence(['scripts', 'copy', 'icons'], 'minify');
+  runSequence(['scripts', 'icons', 'copy'], 'minify');
 });
 
 gulp.task('dist', function() {
-  runSequence('clean', ['scripts', 'copy', 'icons'], 'minify', 'compress');
+  runSequence('clean', ['scripts', 'icons', 'copy'], 'minify', 'compress');
 });
