@@ -106,8 +106,8 @@ gulp.task('copy', function() {
 
 gulp.task('serve', ['scripts', 'sass', 'icons', 'copy'], function() {
   browserSync.init({
-    proxy: options.store
-    injectChanges: false,
+    proxy: options.store,
+    injectChanges: false
   });
 
   gulp.watch(options.src.scripts + '/**/*.js', ['scripts']);
