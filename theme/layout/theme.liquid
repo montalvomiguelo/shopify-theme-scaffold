@@ -5,7 +5,7 @@
     {% include 'head-description' %}
     {% include 'head-open-graph' %}
     {{ content_for_header }}
-    {{ 'styles.css' | asset_url | stylesheet_tag }}
+    {{ 'style.css' | asset_url | stylesheet_tag }}
   </head>
   <body>
     {{ content_for_layout }}
