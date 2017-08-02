@@ -19,7 +19,8 @@ var options = {
     assets: '.build/assets',
     snippets: '.build/snippets'
   },
-  store: 'https://your-store.myshopify.com'
+  store: 'your-store.myshopify.com',
+  themeId: '123456789'
 };
 
 function processSvg($, file) {
@@ -106,7 +107,7 @@ gulp.task('copy', function() {
 
 gulp.task('serve', ['scripts', 'sass', 'icons', 'copy'], function() {
   browserSync.init({
-    proxy: options.store,
+    proxy: 'https://' + options.store + '?preview_theme_id=' + options.themeId,
     injectChanges: false
   });
 
