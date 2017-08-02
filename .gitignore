@@ -2,7 +2,7 @@
 .sass-cache
 node_modules
 bower_components
-dist
+upload
 config.yml
 /.build/assets
 /.build/config

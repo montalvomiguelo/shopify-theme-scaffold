@@ -7,6 +7,20 @@ var del = require('del');
 var runSequence = require('run-sequence');
 var browserSync = require('browser-sync').create();
 
+var options = {
+  src: {
+    root: 'theme',
+    scripts: 'theme/assets/js',
+    sass: 'theme/assets/scss',
+    icons: 'theme/icons',
+  },
+  dist: {
+    root: '.build',
+    assets: '.build/assets',
+    snippets: '.build/snippets'
+  }
+};
+
 function processSvg($, file) {
   var $svg = $('svg');
   var $newSvg = $('<svg aria-hidden="true" focusable="false" role="presentation" class="icon" />');
@@ -39,29 +53,29 @@ function processSvg($, file) {
 }
 
 gulp.task('scripts', function() {
-  return gulp.src(['theme/assets/js/script-*.js'])
-    .pipe($.newer('.build/assets/script.js.liquid'))
+  return gulp.src([options.src.scripts + '/script-*.js'])
+    .pipe($.newer(options.dist.assets + '/script.js.liquid'))
     .pipe($.concat('script.js'))
     .pipe($.rename({extname: '.js.liquid'}))
-    .pipe(gulp.dest('.build/assets'));
+    .pipe(gulp.dest(options.dist.assets));
 });
 
 gulp.task('sass', function() {
-  return gulp.src('theme/assets/scss/styles.scss')
+  return gulp.src(options.src.sass + '/style.scss')
     .pipe($.newer({
-      dest: '.build/assets',
+      dest: options.dist.assets,
       ext: '.css.liquid',
-      extra: 'theme/assets/scss/**/*.scss'
+      extra: options.src.assets + '/scss/**/*.scss'
     }))
     .pipe($.sass().on('error', $.sass.logError))
     .pipe($.rename({extname: '.css.liquid'}))
-    .pipe(gulp.dest('.build/assets'));
+    .pipe(gulp.dest(options.dist.assets));
 });
 
 gulp.task('icons', function() {
-  return gulp.src('theme/icons/**/*.svg')
+  return gulp.src(options.src.icons + '/**/*.svg')
     .pipe($.newer({
-      dest: '.build/snippets',
+      dest: options.dist.snippets,
       ext: '.liquid'
     }))
     .pipe($.svgmin({
@@ -71,13 +85,18 @@ gulp.task('icons', function() {
       run: processSvg
     }))
     .pipe($.rename({extname: '.liquid'}))
-    .pipe(gulp.dest('.build/snippets'));
+    .pipe(gulp.dest(options.dist.snippets));
 });
 
 gulp.task('copy', function() {
-  return gulp.src(['theme/**/*', '!theme/assets/js{,/**}', '!theme/assets/scss{,/**}', '!theme/icons{,/**}'])
-    .pipe($.newer('.build'))
-    .pipe(gulp.dest('.build'));
+  return gulp.src([
+      options.src.root + '/**/*',
+      '!' + options.src.scripts + '{,/**}',
+      '!' + options.src.sass + '{,/**}',
+      '!' + options.src.icons + '{,/**}'
+    ])
+    .pipe($.newer(options.dist.root))
+    .pipe(gulp.dest(options.dist.root));
 });
 
 gulp.task('serve', ['scripts', 'sass', 'icons', 'copy'], function() {
@@ -86,40 +105,40 @@ gulp.task('serve', ['scripts', 'sass', 'icons', 'copy'], function() {
     injectChanges: false,
   });
 
-  gulp.watch('theme/assets/js/**/*.js', ['scripts']);
-  gulp.watch('theme/assets/scss/**/*.scss', ['sass']);
-  gulp.watch('theme/icons/**/*.svg', ['icons']);
+  gulp.watch(options.src.scripts + '/**/*.js', ['scripts']);
+  gulp.watch(options.src.sass + '/**/*.scss', ['sass']);
+  gulp.watch(options.src.icons + '/**/*.svg', ['icons']);
   gulp.watch([
-    'theme/**/*',
-    '!theme/assets/js/**/*',
-    '!theme/assets/scss/**/*',
-    '!theme/icons/**/*',
+    options.src.root + '/**/*',
+    '!' + options.src.scripts + '/**/*',
+    '!' + options.src.sass + '/**/*',
+    '!' + options.src.icons + '/**/*'
   ], ['copy']);
 
   gulp.watch('/tmp/theme.update').on('change', browserSync.reload);
 });
 
 gulp.task('minify', function() {
-  var scripts = gulp.src('.build/assets/*.js.liquid')
+  var scripts = gulp.src(options.dist.assets + '/*.js.liquid')
     .pipe($.uglify())
-    .pipe(gulp.dest('.build/assets'));
+    .pipe(gulp.dest(options.dist.assets));
 
-  var sass = gulp.src('theme/assets/scss/styles.scss')
+  var sass = gulp.src(options.src.sass + '/style.scss')
     .pipe($.sass({outputStyle: 'compressed'}).on('error', $.sass.logError))
     .pipe($.rename({extname: '.css.liquid'}))
-    .pipe(gulp.dest('.build/assets'));
+    .pipe(gulp.dest(options.dist.assets));
 
   return merge(scripts, sass);
 });
 
 gulp.task('clean', function() {
-  return del(['.build/**/*', 'dist', '!.build/**/*.yml*']);
+  return del([options.dist.root + '/**/*', '!' + options.dist.root + '/**/*.yml*']);
 });
 
 gulp.task('compress', function() {
-  return gulp.src('.build/**/*')
+  return gulp.src(options.dist.root + '/**/*')
     .pipe($.zip('your-theme-name.zip'))
-    .pipe(gulp.dest('dist'));
+    .pipe(gulp.dest('upload'));
 });
 
 gulp.task('default', ['serve']);
