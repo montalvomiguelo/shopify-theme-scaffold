@@ -53,9 +53,13 @@ function processSvg($, file) {
 }
 
 gulp.task('scripts', function() {
-  return gulp.src([options.src.scripts + '/script-*.js'])
-    .pipe($.newer(options.dist.assets + '/script.js.liquid'))
-    .pipe($.concat('script.js'))
+  return gulp.src(options.src.scripts + '/script.js')
+    .pipe($.newer({
+      dest: options.dist.assets,
+      ext: '.js.liquid',
+      extra: options.src.scripts + '/**/*.js'
+    }))
+    .pipe($.include()).on('error', console.log)
     .pipe($.rename({extname: '.js.liquid'}))
     .pipe(gulp.dest(options.dist.assets));
 });
@@ -65,7 +69,7 @@ gulp.task('sass', function() {
     .pipe($.newer({
       dest: options.dist.assets,
       ext: '.css.liquid',
-      extra: options.src.assets + '/scss/**/*.scss'
+      extra: options.src.sass + '/**/*.scss'
     }))
     .pipe($.sass().on('error', $.sass.logError))
     .pipe($.rename({extname: '.css.liquid'}))
