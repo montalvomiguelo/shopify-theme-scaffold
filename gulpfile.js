@@ -18,7 +18,8 @@ var options = {
     root: '.build',
     assets: '.build/assets',
     snippets: '.build/snippets'
-  }
+  },
+  store: 'https://your-store.myshopify.com'
 };
 
 function processSvg($, file) {
@@ -105,7 +106,7 @@ gulp.task('copy', function() {
 
 gulp.task('serve', ['scripts', 'sass', 'icons', 'copy'], function() {
   browserSync.init({
-    proxy: 'https://your-store.myshopify.com',
+    proxy: options.store
     injectChanges: false,
   });
 
